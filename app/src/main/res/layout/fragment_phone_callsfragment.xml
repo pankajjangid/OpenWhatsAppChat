@@ -1,0 +1,16 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/pressed_bg"
+    tools:context="com.whatsappdirect.direct_chat.PhoneCallsfragment">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycleview_call_log"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="4dp">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+</FrameLayout>

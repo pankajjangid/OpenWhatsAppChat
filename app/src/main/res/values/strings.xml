@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">Open WhatsApp Chat</string>
+    <string name="app_actname">Open WhatsApp Chat</string>
+
+    <string name="dialog_title">Select a number</string>
+
+    <string name="menu_name1">About us</string>
+    <string name="menu_name2">Share App</string>
+    <string name="menu_name3">Rate App</string>
+    <string name="menu_name4">Terms and Privacy</string>
+
+    <string name="call_list">Select Number</string>
+
+    <string name="banner_home_footer">ca-app-pub-4350333913015603/1887471867</string>
+    <string name="Interstitial_Ad">ca-app-pub-4350333913015603/4861313089</string>
+
+    <string name="next">NEXT</string>
+    <string name="skip">SKIP</string>
+    <string name="start">GOT IT</string>
+
+    <string name="phone">calls</string>
+    <string name="message">Message</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+</resources>
