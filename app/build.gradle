@@ -18,27 +18,83 @@ repositories {
 android {
     compileSdkVersion 29
     defaultConfig {
-        applicationId "com.whatsappdirect.direct_cha"
-        minSdkVersion 19
-        targetSdkVersion 29
-        versionCode 7
-        versionName "2.1"
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
     }
+    signingConfigs{
+        release {
+            keyAlias 'key0'
+            keyPassword 'Pankaj@1611'
+            storeFile file('keystore/direct_chat_open.jks')
+            storePassword 'Pankaj@1611'
+        }
+
+    }
+
+    if (project.hasProperty('keyAlias')) {
+        android.signingConfigs.release.keyAlias = keyAlias
+    }
+    if (project.hasProperty('keyPassword')) {
+        android.signingConfigs.release.keyPassword = keyPassword
+    }
+    if (project.hasProperty('storeFile')) {
+        android.signingConfigs.release.storeFile = file(storeFile)
+    }
+    if (project.hasProperty('storePassword')) {
+        android.signingConfigs.release.storePassword = storePassword
+    }
+
     buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            if (project.hasProperty('storeFile')) {
+                signingConfig signingConfigs.release
+            }
+            buildConfigField "boolean", "DEVELOPER_MODE", "false"
+            signingConfig signingConfigs.release
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard.cfg'
+
+        }
+
+        debug{
+
+            buildConfigField "boolean", "DEVELOPER_MODE", "true"
         }
     }
-/*    dexOptions {
-        incremental true
-        javaMaxHeapSize "4g"
-        preDexLibraries true
-        dexInProcess = true
-    }*/
+
+    flavorDimensions "version"
+    productFlavors {
+        appFlavor {
+            applicationId "com.whatsappdirect.direct_cha"
+            minSdkVersion 19
+            targetSdkVersion 29
+            versionCode 8
+            versionName "2.2"
+
+            //manifestPlaceholders = [appName: "@string/app_name_free"]
+
+            //Configure this flavor specific app name published in Play Store
+            /* resValue "string", "app_name", "Demo Free"
+             buildConfigField "boolean", "IS_PAID", "false"*/
+
+        }
+
+    }
+
+    android.applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName =
+                    "OpenWhatsAppChat_${variant.buildType.name}_${getDate()}_v${variant.versionName}(v${variant.versionCode}).apk"
+        }
+    }
+}
+static def getDate() {
+    def date = new Date()
+    def formattedDate = date.format('dd_MMM_yyyy')
+    return formattedDate
 }
 
 dependencies {
