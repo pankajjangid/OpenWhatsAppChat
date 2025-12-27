@@ -48,6 +48,10 @@ import com.whatsappdirect.direct_chat.ui.screens.tools.bulkmessage.BulkMessageSc
 import com.whatsappdirect.direct_chat.ui.screens.tools.sticker.ImageToStickerScreen
 import com.whatsappdirect.direct_chat.ui.screens.groups.ContactGroupsScreen
 import com.whatsappdirect.direct_chat.ui.screens.tools.scheduler.MessageSchedulerScreen
+import com.whatsappdirect.direct_chat.ui.screens.tools.videosplitter.VideoSplitterScreen
+import com.whatsappdirect.direct_chat.ui.screens.tools.blankmessage.BlankMessageScreen
+import com.whatsappdirect.direct_chat.ui.screens.tools.emojicombos.EmojiCombosScreen
+import com.whatsappdirect.direct_chat.ui.screens.tools.waweb.WAWebScreen
 import com.whatsappdirect.direct_chat.ui.theme.WhatsAppDirectTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -180,6 +184,18 @@ fun MainApp() {
                     },
                     onNavigateToScheduler = {
                         navController.navigate(Screen.MessageScheduler.route)
+                    },
+                    onNavigateToVideoSplitter = {
+                        navController.navigate(Screen.VideoSplitter.route)
+                    },
+                    onNavigateToBlankMessage = {
+                        navController.navigate(Screen.BlankMessage.route)
+                    },
+                    onNavigateToEmojiCombos = {
+                        navController.navigate(Screen.EmojiCombos.route)
+                    },
+                    onNavigateToWAWeb = {
+                        navController.navigate(Screen.WAWeb.route)
                     }
                 )
             }
@@ -234,6 +250,30 @@ fun MainApp() {
             
             composable(Screen.MessageScheduler.route) {
                 MessageSchedulerScreen(
+                    onNavigateBack = { navController.popBackStack() }
+                )
+            }
+            
+            composable(Screen.VideoSplitter.route) {
+                VideoSplitterScreen(
+                    onNavigateBack = { navController.popBackStack() }
+                )
+            }
+            
+            composable(Screen.BlankMessage.route) {
+                BlankMessageScreen(
+                    onNavigateBack = { navController.popBackStack() }
+                )
+            }
+            
+            composable(Screen.EmojiCombos.route) {
+                EmojiCombosScreen(
+                    onNavigateBack = { navController.popBackStack() }
+                )
+            }
+            
+            composable(Screen.WAWeb.route) {
+                WAWebScreen(
                     onNavigateBack = { navController.popBackStack() }
                 )
             }

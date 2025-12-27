@@ -78,6 +78,18 @@ fun NavGraph(
                 },
                 onNavigateToScheduler = {
                     navController.navigate(Screen.MessageScheduler.route)
+                },
+                onNavigateToVideoSplitter = {
+                    navController.navigate(Screen.VideoSplitter.route)
+                },
+                onNavigateToBlankMessage = {
+                    navController.navigate(Screen.BlankMessage.route)
+                },
+                onNavigateToEmojiCombos = {
+                    navController.navigate(Screen.EmojiCombos.route)
+                },
+                onNavigateToWAWeb = {
+                    navController.navigate(Screen.WAWeb.route)
                 }
             )
         }

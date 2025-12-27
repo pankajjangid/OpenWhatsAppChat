@@ -22,6 +22,9 @@ sealed class Screen(val route: String) {
     data object ImageToSticker : Screen("image_to_sticker")
     data object ContactGroups : Screen("contact_groups")
     data object MessageScheduler : Screen("message_scheduler")
+    data object VideoSplitter : Screen("video_splitter")
+    data object EmojiCombos : Screen("emoji_combos")
+    data object WAWeb : Screen("wa_web")
 }
 
 sealed class BottomNavItem(

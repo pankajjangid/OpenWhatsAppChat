@@ -81,7 +81,14 @@ fun ContactsScreen(
     
     var searchQuery by remember { mutableStateOf("") }
     
-    val contactsPermission = rememberPermissionState(Manifest.permission.READ_CONTACTS)
+    val contactsPermission = rememberPermissionState(
+        Manifest.permission.READ_CONTACTS,
+        onPermissionResult = { granted ->
+            if (granted) {
+                viewModel.loadDeviceContacts()
+            }
+        }
+    )
     
     LaunchedEffect(contactsPermission.status.isGranted) {
         if (contactsPermission.status.isGranted) {

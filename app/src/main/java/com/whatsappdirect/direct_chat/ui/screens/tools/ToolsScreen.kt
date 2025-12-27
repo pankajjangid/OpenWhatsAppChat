@@ -14,14 +14,18 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Computer
+import androidx.compose.material.icons.filled.ContentCut
 import androidx.compose.material.icons.filled.Download
+import androidx.compose.material.icons.filled.EmojiEmotions
 import androidx.compose.material.icons.filled.FormatBold
 import androidx.compose.material.icons.filled.Group
-import androidx.compose.material.icons.filled.QrCode
 import androidx.compose.material.icons.filled.Image
+import androidx.compose.material.icons.filled.QrCode
 import androidx.compose.material.icons.filled.QrCodeScanner
 import androidx.compose.material.icons.filled.Repeat
 import androidx.compose.material.icons.filled.Schedule
+import androidx.compose.material.icons.filled.SpaceBar
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -94,6 +98,30 @@ val tools = listOf(
         name = "Message Scheduler",
         description = "Schedule messages",
         icon = Icons.Default.Schedule
+    ),
+    Tool(
+        id = "video_splitter",
+        name = "Video Splitter",
+        description = "Split videos for status",
+        icon = Icons.Default.ContentCut
+    ),
+    Tool(
+        id = "blank_message",
+        name = "Blank Message",
+        description = "Send invisible messages",
+        icon = Icons.Default.SpaceBar
+    ),
+    Tool(
+        id = "emoji_combos",
+        name = "Emoji Combos",
+        description = "Popular emoji combinations",
+        icon = Icons.Default.EmojiEmotions
+    ),
+    Tool(
+        id = "wa_web",
+        name = "WhatsApp Web",
+        description = "Link to WhatsApp Web",
+        icon = Icons.Default.Computer
     )
 )
 
@@ -107,7 +135,11 @@ fun ToolsScreen(
     onNavigateToQrScanner: () -> Unit,
     onNavigateToBulkMessage: () -> Unit,
     onNavigateToImageToSticker: () -> Unit,
-    onNavigateToScheduler: () -> Unit
+    onNavigateToScheduler: () -> Unit,
+    onNavigateToVideoSplitter: () -> Unit,
+    onNavigateToBlankMessage: () -> Unit,
+    onNavigateToEmojiCombos: () -> Unit,
+    onNavigateToWAWeb: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -142,6 +174,10 @@ fun ToolsScreen(
                             "bulk_message" -> onNavigateToBulkMessage()
                             "image_to_sticker" -> onNavigateToImageToSticker()
                             "scheduler" -> onNavigateToScheduler()
+                            "video_splitter" -> onNavigateToVideoSplitter()
+                            "blank_message" -> onNavigateToBlankMessage()
+                            "emoji_combos" -> onNavigateToEmojiCombos()
+                            "wa_web" -> onNavigateToWAWeb()
                         }
                     }
                 )
