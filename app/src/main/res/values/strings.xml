@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">Direct Chat For Whatsapp</string>
-    <string name="app_actname">Direct Chat For Whatsapp</string>
+    <string name="app_name">Whatsapp Tools</string>
+    <string name="app_actname">Whatsapp Tools</string>
 
     <string name="dialog_title">Select a number</string>
 

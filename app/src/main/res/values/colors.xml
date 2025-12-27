@@ -12,7 +12,9 @@
     <color name="colorPrimary">#673ab7</color>
     <color name="colorPrimaryDark">#512da8</color>
     <color name="colorAccent">#9c27b0</color>
-
+    
+    <color name="whatsapp_green">#128C7E</color>
+    <color name="pressed_bg">#E0E0E0</color>
 
     <color name="colorSecondary">#fcfbfb</color>
     <color name="colorSecondaryDark">#c7c7c7</color>

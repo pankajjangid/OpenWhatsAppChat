@@ -1,49 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.whatsappdirect.direct_chat">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET" />
-<!--    <uses-permission android:name="android.permission.READ_CALL_LOG" />-->
-    <!--<uses-permission android:name="Manifest.permission.BROADCAST_SMS" />-->
-    <!--<uses-permission android:name="android.permission.BROADCAST_SMS"/>-->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" 
+        android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="29" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
+        android:minSdkVersion="30" />
 
     <application
-        android:name="androidx.multidex.MultiDexApplication"
+        android:name=".WhatsAppDirectApp"
         android:allowBackup="true"
-        android:hardwareAccelerated="false"
         android:icon="@drawable/appicon"
         android:label="@string/app_name"
-        android:largeHeap="true"
         android:roundIcon="@drawable/round_appicon"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/Theme.WhatsAppDirect">
+        
         <activity
-            android:name="com.whatsappdirect.direct_chat.Activity.MainActivity"
-            android:label="@string/app_actname"
-            android:windowSoftInputMode="adjustPan" />
-
-        <meta-data
-            android:name="io.fabric.ApiKey"
-            android:value="ae8696c9f626fd42728f7563dcd18f9e781c6a2a" />
-
-        <activity android:name="com.whatsappdirect.direct_chat.Activity.SplashActivity">
+            android:name=".ui.MainActivityCompose"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.WhatsAppDirect">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.whatsappdirect.direct_chat.Activity.TermsAndPrivacyActivity" />
-        <activity android:name="com.whatsappdirect.direct_chat.Activity.CallLogHistoryList" />
-        <activity android:name="com.whatsappdirect.direct_chat.Activity.LaunchActivity"></activity>
 
         <meta-data
-            android:name="com.google.android.gms.ads.AD_MANAGER_APP"
-            android:value="true"/>
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-4350333913015603~5826716879" />
+        
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+            
     </application>
-
-    <meta-data
-        android:name="com.google.android.gms.ads.APPLICATION_ID"
-        android:value="ca-app-pub-4350333913015603~5826716879"/>
 
 </manifest>

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "324884068392",
+    "project_id": "whatsapptools-47ffa",
+    "storage_bucket": "whatsapptools-47ffa.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:324884068392:android:8cbc82ebb7479ecf151d1d",
+        "android_client_info": {
+          "package_name": "com.whatsappdirect.direct_chat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAKoJ6Mfiqg3Aqn3JIYcezpO1QtN11gvcE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
