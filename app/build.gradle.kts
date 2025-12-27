@@ -10,15 +10,15 @@ plugins {
 }
 
 android {
-    namespace = "com.whatsappdirect.direct_chat"
+    namespace = "com.whatsappdirect.direct_cha"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.whatsappdirect.direct_chat"
+        applicationId = "com.whatsappdirect.direct_cha"
         minSdk = 24
         targetSdk = 35
-        versionCode = 13
-        versionName = "2.0.0"
+        versionCode = 15
+        versionName = "3.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -143,6 +143,9 @@ dependencies {
     
     // Biometric
     implementation(libs.biometric)
+    
+    // DocumentFile for SAF
+    implementation(libs.documentfile)
     
     // Video processing - using native Android APIs
 

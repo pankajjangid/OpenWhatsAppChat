@@ -124,6 +124,9 @@ accompanist-permissions = { group = "com.google.accompanist", name = "accompanis
 # Biometric
 biometric = { group = "androidx.biometric", name = "biometric", version.ref = "biometric" }
 
+# DocumentFile for SAF
+documentfile = { group = "androidx.documentfile", name = "documentfile", version = "1.0.1" }
+
 # Testing
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitExt" }
