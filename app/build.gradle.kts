@@ -143,6 +143,8 @@ dependencies {
     
     // Biometric
     implementation(libs.biometric)
+    
+    // Video processing - using native Android APIs
 
     // Testing
     testImplementation(libs.junit)

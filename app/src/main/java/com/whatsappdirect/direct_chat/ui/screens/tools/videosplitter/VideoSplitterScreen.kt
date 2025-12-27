@@ -2,6 +2,7 @@ package com.whatsappdirect.direct_chat.ui.screens.tools.videosplitter
 
 import android.content.ContentValues
 import android.content.Context
+import android.content.Intent
 import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.os.Build
@@ -13,7 +14,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,11 +26,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.filled.ContentCut
-import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Upload
 import androidx.compose.material.icons.filled.VideoFile
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -55,14 +57,22 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import android.media.MediaCodec
+import android.media.MediaExtractor
+import android.media.MediaFormat
+import android.media.MediaMuxer
+import androidx.core.content.FileProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -307,6 +317,7 @@ fun VideoSplitterScreen(
                     ) {
                         itemsIndexed(segments) { index, segment ->
                             SegmentCard(
+                                context = context,
                                 index = index + 1,
                                 segment = segment
                             )
@@ -320,6 +331,7 @@ fun VideoSplitterScreen(
 
 @Composable
 fun SegmentCard(
+    context: Context,
     index: Int,
     segment: VideoSegment
 ) {
@@ -329,34 +341,99 @@ fun SegmentCard(
             containerColor = MaterialTheme.colorScheme.secondaryContainer
         )
     ) {
-        Row(
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(12.dp),
-            verticalAlignment = Alignment.CenterVertically
+                .padding(12.dp)
         ) {
-            Icon(
-                imageVector = Icons.Default.PlayArrow,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary
-            )
-            Spacer(modifier = Modifier.width(12.dp))
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = "Segment $index",
-                    style = MaterialTheme.typography.titleSmall
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.Default.VideoFile,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(40.dp)
                 )
-                Text(
-                    text = "${formatDuration(segment.startTime)} - ${formatDuration(segment.endTime)}",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+                Spacer(modifier = Modifier.width(12.dp))
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = "Segment $index",
+                        style = MaterialTheme.typography.titleSmall
+                    )
+                    Text(
+                        text = "${formatDuration(segment.startTime)} - ${formatDuration(segment.endTime)}",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    if (segment.fileUri != null) {
+                        Text(
+                            text = "✓ Saved",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                }
             }
-            Text(
-                text = "✓ Saved",
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.primary
-            )
+            
+            if (segment.fileUri != null) {
+                Spacer(modifier = Modifier.height(12.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    // Share to WhatsApp
+                    Button(
+                        onClick = {
+                            shareToWhatsApp(context, segment.fileUri, "com.whatsapp")
+                        },
+                        modifier = Modifier.weight(1f),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color(0xFF25D366)
+                        )
+                    ) {
+                        Icon(
+                            Icons.AutoMirrored.Filled.Send,
+                            contentDescription = null,
+                            modifier = Modifier.size(16.dp)
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text("WhatsApp", style = MaterialTheme.typography.labelMedium)
+                    }
+                    
+                    // Share to WA Business
+                    Button(
+                        onClick = {
+                            shareToWhatsApp(context, segment.fileUri, "com.whatsapp.w4b")
+                        },
+                        modifier = Modifier.weight(1f),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color(0xFF128C7E)
+                        )
+                    ) {
+                        Icon(
+                            Icons.AutoMirrored.Filled.Send,
+                            contentDescription = null,
+                            modifier = Modifier.size(16.dp)
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text("Business", style = MaterialTheme.typography.labelMedium)
+                    }
+                    
+                    // General Share
+                    OutlinedButton(
+                        onClick = {
+                            shareVideo(context, segment.fileUri)
+                        }
+                    ) {
+                        Icon(
+                            Icons.Default.Share,
+                            contentDescription = null,
+                            modifier = Modifier.size(16.dp)
+                        )
+                    }
+                }
+            }
         }
     }
 }
@@ -365,7 +442,8 @@ data class VideoSegment(
     val index: Int,
     val startTime: Int,
     val endTime: Int,
-    val filePath: String
+    val filePath: String,
+    val fileUri: Uri? = null
 )
 
 private fun formatDuration(seconds: Int): String {
@@ -385,6 +463,87 @@ private fun getFileName(context: Context, uri: Uri): String {
     return name
 }
 
+private fun shareToWhatsApp(context: Context, uri: Uri, packageName: String) {
+    try {
+        val intent = Intent(Intent.ACTION_SEND).apply {
+            type = "video/*"
+            putExtra(Intent.EXTRA_STREAM, uri)
+            setPackage(packageName)
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        }
+        context.startActivity(Intent.createChooser(intent, "Share to WhatsApp"))
+    } catch (e: Exception) {
+        Toast.makeText(context, "WhatsApp not installed", Toast.LENGTH_SHORT).show()
+    }
+}
+
+private fun shareVideo(context: Context, uri: Uri) {
+    try {
+        val intent = Intent(Intent.ACTION_SEND).apply {
+            type = "video/*"
+            putExtra(Intent.EXTRA_STREAM, uri)
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        }
+        context.startActivity(Intent.createChooser(intent, "Share Video"))
+    } catch (e: Exception) {
+        Toast.makeText(context, "Error sharing video", Toast.LENGTH_SHORT).show()
+    }
+}
+
+private fun copyUriToFile(context: Context, uri: Uri, destFile: File): Boolean {
+    return try {
+        context.contentResolver.openInputStream(uri)?.use { input ->
+            FileOutputStream(destFile).use { output ->
+                input.copyTo(output)
+            }
+        }
+        true
+    } catch (e: Exception) {
+        e.printStackTrace()
+        false
+    }
+}
+
+private fun getOutputDir(context: Context): File {
+    val dir = File(context.getExternalFilesDir(Environment.DIRECTORY_MOVIES), "VideoSplitter")
+    if (!dir.exists()) {
+        dir.mkdirs()
+    }
+    return dir
+}
+
+private fun saveToGallery(context: Context, file: File): Uri? {
+    return try {
+        val contentValues = ContentValues().apply {
+            put(MediaStore.Video.Media.DISPLAY_NAME, file.name)
+            put(MediaStore.Video.Media.MIME_TYPE, "video/mp4")
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                put(MediaStore.Video.Media.RELATIVE_PATH, Environment.DIRECTORY_MOVIES + "/WhatsAppTools")
+                put(MediaStore.Video.Media.IS_PENDING, 1)
+            }
+        }
+        
+        val uri = context.contentResolver.insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, contentValues)
+        uri?.let {
+            context.contentResolver.openOutputStream(it)?.use { output ->
+                file.inputStream().use { input ->
+                    input.copyTo(output)
+                }
+            }
+            
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                contentValues.clear()
+                contentValues.put(MediaStore.Video.Media.IS_PENDING, 0)
+                context.contentResolver.update(it, contentValues, null, null)
+            }
+        }
+        uri
+    } catch (e: Exception) {
+        e.printStackTrace()
+        null
+    }
+}
+
 private suspend fun splitVideo(
     context: Context,
     videoUri: Uri,
@@ -394,46 +553,88 @@ private suspend fun splitVideo(
     val segments = mutableListOf<VideoSegment>()
     
     try {
+        // Get video duration
         val retriever = MediaMetadataRetriever()
         retriever.setDataSource(context, videoUri)
         val durationMs = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)?.toLongOrNull() ?: 0
         val totalDurationSec = (durationMs / 1000).toInt()
         retriever.release()
         
-        // Calculate segments
-        var currentTime = 0
-        var segmentIndex = 0
+        // Create output directory
+        val outputDir = getOutputDir(context)
         
-        while (currentTime < totalDurationSec) {
-            val endTime = minOf(currentTime + segmentDurationSec, totalDurationSec)
-            
-            // For now, we'll just create segment info
-            // Full video splitting requires FFmpeg or MediaCodec which is complex
-            // This creates a reference to the original video with time markers
-            segments.add(
-                VideoSegment(
-                    index = segmentIndex,
-                    startTime = currentTime,
-                    endTime = endTime,
-                    filePath = "segment_${segmentIndex + 1}"
-                )
-            )
-            
-            currentTime = endTime
-            segmentIndex++
-            onProgress(currentTime.toFloat() / totalDurationSec)
+        // Copy input video to temp file
+        val timestamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+        val inputFile = File(outputDir, "input_$timestamp.mp4")
+        
+        if (!copyUriToFile(context, videoUri, inputFile)) {
+            withContext(Dispatchers.Main) {
+                Toast.makeText(context, "Error copying video file", Toast.LENGTH_SHORT).show()
+            }
+            return@withContext segments
         }
         
-        // Note: Full video splitting requires FFmpeg library
-        // For a complete implementation, add:
-        // implementation("com.arthenica:ffmpeg-kit-full:6.0-2")
+        // Calculate segments and split using MediaMuxer
+        var currentTimeMs: Long = 0
+        var segmentIndex = 0
+        val segmentDurationMs = segmentDurationSec * 1000L
+        val totalDurationMs = durationMs
+        val totalSegments = kotlin.math.ceil(totalDurationMs.toDouble() / segmentDurationMs).toInt()
+        
+        while (currentTimeMs < totalDurationMs) {
+            val endTimeMs = minOf(currentTimeMs + segmentDurationMs, totalDurationMs)
+            
+            val outputFile = File(outputDir, "segment_${timestamp}_${segmentIndex + 1}.mp4")
+            
+            val success = splitVideoSegment(
+                inputFile.absolutePath,
+                outputFile.absolutePath,
+                currentTimeMs * 1000, // Convert to microseconds
+                endTimeMs * 1000
+            )
+            
+            if (success && outputFile.exists() && outputFile.length() > 0) {
+                // Save to gallery
+                val galleryUri = saveToGallery(context, outputFile)
+                
+                // Get file provider URI for sharing
+                val fileUri = try {
+                    FileProvider.getUriForFile(
+                        context,
+                        "${context.packageName}.fileprovider",
+                        outputFile
+                    )
+                } catch (e: Exception) {
+                    galleryUri
+                }
+                
+                segments.add(
+                    VideoSegment(
+                        index = segmentIndex,
+                        startTime = (currentTimeMs / 1000).toInt(),
+                        endTime = (endTimeMs / 1000).toInt(),
+                        filePath = outputFile.absolutePath,
+                        fileUri = fileUri
+                    )
+                )
+            } else {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(context, "Error splitting segment ${segmentIndex + 1}", Toast.LENGTH_SHORT).show()
+                }
+            }
+            
+            currentTimeMs = endTimeMs
+            segmentIndex++
+            onProgress(segmentIndex.toFloat() / totalSegments)
+        }
+        
+        // Clean up input file
+        inputFile.delete()
         
         withContext(Dispatchers.Main) {
-            Toast.makeText(
-                context, 
-                "Note: Video segments are marked. For actual splitting, share to a video editor app.",
-                Toast.LENGTH_LONG
-            ).show()
+            if (segments.isNotEmpty()) {
+                Toast.makeText(context, "Split complete! ${segments.size} segments saved to Movies/WhatsAppTools", Toast.LENGTH_LONG).show()
+            }
         }
         
     } catch (e: Exception) {
@@ -444,4 +645,92 @@ private suspend fun splitVideo(
     }
     
     segments
+}
+
+private fun splitVideoSegment(
+    inputPath: String,
+    outputPath: String,
+    startTimeUs: Long,
+    endTimeUs: Long
+): Boolean {
+    var extractor: MediaExtractor? = null
+    var muxer: MediaMuxer? = null
+    
+    try {
+        extractor = MediaExtractor()
+        extractor.setDataSource(inputPath)
+        
+        val trackCount = extractor.trackCount
+        muxer = MediaMuxer(outputPath, MediaMuxer.OutputFormat.MUXER_OUTPUT_MPEG_4)
+        
+        val indexMap = mutableMapOf<Int, Int>()
+        
+        // Add tracks
+        for (i in 0 until trackCount) {
+            val format = extractor.getTrackFormat(i)
+            val mime = format.getString(MediaFormat.KEY_MIME) ?: continue
+            
+            if (mime.startsWith("video/") || mime.startsWith("audio/")) {
+                val newTrackIndex = muxer.addTrack(format)
+                indexMap[i] = newTrackIndex
+            }
+        }
+        
+        if (indexMap.isEmpty()) {
+            return false
+        }
+        
+        muxer.start()
+        
+        val bufferSize = 1024 * 1024 // 1MB buffer
+        val buffer = java.nio.ByteBuffer.allocate(bufferSize)
+        val bufferInfo = MediaCodec.BufferInfo()
+        
+        // Process each track
+        for ((extractorTrackIndex, muxerTrackIndex) in indexMap) {
+            extractor.selectTrack(extractorTrackIndex)
+            extractor.seekTo(startTimeUs, MediaExtractor.SEEK_TO_CLOSEST_SYNC)
+            
+            while (true) {
+                val sampleTime = extractor.sampleTime
+                if (sampleTime < 0 || sampleTime > endTimeUs) {
+                    break
+                }
+                
+                buffer.clear()
+                val sampleSize = extractor.readSampleData(buffer, 0)
+                
+                if (sampleSize < 0) {
+                    break
+                }
+                
+                bufferInfo.offset = 0
+                bufferInfo.size = sampleSize
+                bufferInfo.presentationTimeUs = sampleTime - startTimeUs
+                bufferInfo.flags = extractor.sampleFlags
+                
+                muxer.writeSampleData(muxerTrackIndex, buffer, bufferInfo)
+                
+                if (!extractor.advance()) {
+                    break
+                }
+            }
+            
+            extractor.unselectTrack(extractorTrackIndex)
+        }
+        
+        return true
+        
+    } catch (e: Exception) {
+        e.printStackTrace()
+        return false
+    } finally {
+        try {
+            muxer?.stop()
+            muxer?.release()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        extractor?.release()
+    }
 }
