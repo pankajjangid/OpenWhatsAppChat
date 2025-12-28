@@ -61,7 +61,7 @@
 -dontwarn coil.**
 
 # Data classes
--keep class com.whatsappdirect.direct_chat.data.model.** { *; }
+-keep class com.whatsappdirect.direct_cha.data.model.** { *; }
 
 # Keep Parcelable implementations
 -keepclassmembers class * implements android.os.Parcelable {

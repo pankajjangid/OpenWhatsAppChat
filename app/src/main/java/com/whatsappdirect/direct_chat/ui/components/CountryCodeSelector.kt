@@ -1,4 +1,4 @@
-package com.whatsappdirect.direct_chat.ui.components
+package com.whatsappdirect.direct_cha.ui.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box

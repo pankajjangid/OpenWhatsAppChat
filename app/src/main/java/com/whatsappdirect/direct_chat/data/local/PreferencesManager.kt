@@ -1,4 +1,4 @@
-package com.whatsappdirect.direct_chat.data.local
+package com.whatsappdirect.direct_cha.data.local
 
 import android.content.Context
 import androidx.datastore.core.DataStore

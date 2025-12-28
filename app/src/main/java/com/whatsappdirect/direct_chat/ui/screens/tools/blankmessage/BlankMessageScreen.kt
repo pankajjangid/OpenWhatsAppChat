@@ -1,4 +1,4 @@
-package com.whatsappdirect.direct_chat.ui.screens.tools.blankmessage
+package com.whatsappdirect.direct_cha.ui.screens.tools.blankmessage
 
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -49,7 +49,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import com.whatsappdirect.direct_chat.ui.components.CountryCodeSelector
+import com.whatsappdirect.direct_cha.ui.components.CountryCodeSelector
 import java.net.URLEncoder
 
 @OptIn(ExperimentalMaterial3Api::class)

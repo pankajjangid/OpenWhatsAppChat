@@ -1,4 +1,4 @@
-package com.whatsappdirect.direct_chat.ui.screens.splash
+package com.whatsappdirect.direct_cha.ui.screens.splash
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween

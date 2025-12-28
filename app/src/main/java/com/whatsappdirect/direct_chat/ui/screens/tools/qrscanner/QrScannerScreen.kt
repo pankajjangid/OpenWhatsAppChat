@@ -1,4 +1,4 @@
-package com.whatsappdirect.direct_chat.ui.screens.tools.qrscanner
+package com.whatsappdirect.direct_cha.ui.screens.tools.qrscanner
 
 import android.Manifest
 import android.content.Context

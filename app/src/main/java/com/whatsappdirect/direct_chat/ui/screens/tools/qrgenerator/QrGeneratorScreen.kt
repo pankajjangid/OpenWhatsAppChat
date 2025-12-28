@@ -1,4 +1,4 @@
-package com.whatsappdirect.direct_chat.ui.screens.tools.qrgenerator
+package com.whatsappdirect.direct_cha.ui.screens.tools.qrgenerator
 
 import android.content.ContentValues
 import android.content.Context
@@ -62,7 +62,7 @@ import androidx.core.content.FileProvider
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
 import com.google.zxing.qrcode.QRCodeWriter
-import com.whatsappdirect.direct_chat.ui.components.CountryCodeSelector
+import com.whatsappdirect.direct_cha.ui.components.CountryCodeSelector
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream

@@ -1,4 +1,4 @@
-package com.whatsappdirect.direct_chat.data.local
+package com.whatsappdirect.direct_cha.data.local
 
 import androidx.room.Dao
 import androidx.room.Delete
@@ -6,7 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import com.whatsappdirect.direct_chat.data.model.ScheduledMessage
+import com.whatsappdirect.direct_cha.data.model.ScheduledMessage
 import kotlinx.coroutines.flow.Flow
 
 @Dao

@@ -1,12 +1,12 @@
-package com.whatsappdirect.direct_chat.ui.screens.contacts
+package com.whatsappdirect.direct_cha.ui.screens.contacts
 
 import android.content.ContentResolver
 import android.content.Context
 import android.provider.ContactsContract
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.whatsappdirect.direct_chat.data.local.RecentNumberDao
-import com.whatsappdirect.direct_chat.data.model.RecentNumber
+import com.whatsappdirect.direct_cha.data.local.RecentNumberDao
+import com.whatsappdirect.direct_cha.data.model.RecentNumber
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers

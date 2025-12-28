@@ -1,4 +1,4 @@
-package com.whatsappdirect.direct_chat.ui.screens.directchat
+package com.whatsappdirect.direct_cha.ui.screens.directchat
 
 import android.content.Intent
 import android.net.Uri
@@ -49,8 +49,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.whatsappdirect.direct_chat.ui.components.CountryCodeSelector
-import com.whatsappdirect.direct_chat.ui.screens.directchat.components.MessageTemplatesSheet
+import com.whatsappdirect.direct_cha.ui.components.CountryCodeSelector
+import com.whatsappdirect.direct_cha.ui.screens.directchat.components.MessageTemplatesSheet
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -65,7 +65,7 @@ fun DirectChatScreen(
     val isIncognito by viewModel.incognitoMode.collectAsState(initial = false)
     
     var selectedAppIndex by remember { mutableIntStateOf(0) }
-    val appOptions = listOf("WhatsApp", "WA Business")
+    val appOptions = listOf("WA", "WA Business")
     
     Scaffold(
         topBar = {

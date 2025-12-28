@@ -1,4 +1,4 @@
-package com.whatsappdirect.direct_chat.ui
+package com.whatsappdirect.direct_cha.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -19,6 +19,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -26,33 +27,35 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.whatsappdirect.direct_chat.navigation.Screen
-import com.whatsappdirect.direct_chat.ui.screens.contacts.ContactsScreen
-import com.whatsappdirect.direct_chat.ui.screens.directchat.DirectChatScreen
-import com.whatsappdirect.direct_chat.ui.screens.onboarding.OnboardingScreen
-import com.whatsappdirect.direct_chat.ui.screens.settings.SettingsScreen
-import com.whatsappdirect.direct_chat.ui.screens.splash.SplashScreen
-import com.whatsappdirect.direct_chat.ui.screens.tools.ToolsScreen
-import com.whatsappdirect.direct_chat.ui.screens.tools.textformatter.TextFormatterScreen
-import com.whatsappdirect.direct_chat.ui.screens.tools.qrgenerator.QrGeneratorScreen
-import com.whatsappdirect.direct_chat.ui.screens.tools.statussaver.StatusSaverScreen
-import com.whatsappdirect.direct_chat.ui.screens.settings.AppLockSettingsScreen
-import com.whatsappdirect.direct_chat.ui.screens.tools.textrepeater.TextRepeaterScreen
-import com.whatsappdirect.direct_chat.ui.screens.tools.qrscanner.QrScannerScreen
-import com.whatsappdirect.direct_chat.ui.screens.tools.bulkmessage.BulkMessageScreen
-import com.whatsappdirect.direct_chat.ui.screens.tools.sticker.ImageToStickerScreen
-import com.whatsappdirect.direct_chat.ui.screens.groups.ContactGroupsScreen
-import com.whatsappdirect.direct_chat.ui.screens.tools.scheduler.MessageSchedulerScreen
-import com.whatsappdirect.direct_chat.ui.screens.tools.videosplitter.VideoSplitterScreen
-import com.whatsappdirect.direct_chat.ui.screens.tools.blankmessage.BlankMessageScreen
-import com.whatsappdirect.direct_chat.ui.screens.tools.emojicombos.EmojiCombosScreen
-import com.whatsappdirect.direct_chat.ui.screens.tools.waweb.WAWebScreen
-import com.whatsappdirect.direct_chat.ui.theme.WhatsAppDirectTheme
+import com.whatsappdirect.direct_cha.data.local.PreferencesManager
+import com.whatsappdirect.direct_cha.navigation.Screen
+import com.whatsappdirect.direct_cha.ui.screens.contacts.ContactsScreen
+import com.whatsappdirect.direct_cha.ui.screens.directchat.DirectChatScreen
+import com.whatsappdirect.direct_cha.ui.screens.onboarding.OnboardingScreen
+import com.whatsappdirect.direct_cha.ui.screens.settings.SettingsScreen
+import com.whatsappdirect.direct_cha.ui.screens.splash.SplashScreen
+import com.whatsappdirect.direct_cha.ui.screens.tools.ToolsScreen
+import com.whatsappdirect.direct_cha.ui.screens.tools.textformatter.TextFormatterScreen
+import com.whatsappdirect.direct_cha.ui.screens.tools.qrgenerator.QrGeneratorScreen
+import com.whatsappdirect.direct_cha.ui.screens.tools.statussaver.StatusSaverScreen
+import com.whatsappdirect.direct_cha.ui.screens.settings.AppLockSettingsScreen
+import com.whatsappdirect.direct_cha.ui.screens.tools.textrepeater.TextRepeaterScreen
+import com.whatsappdirect.direct_cha.ui.screens.tools.qrscanner.QrScannerScreen
+import com.whatsappdirect.direct_cha.ui.screens.tools.bulkmessage.BulkMessageScreen
+import com.whatsappdirect.direct_cha.ui.screens.tools.sticker.ImageToStickerScreen
+import com.whatsappdirect.direct_cha.ui.screens.groups.ContactGroupsScreen
+import com.whatsappdirect.direct_cha.ui.screens.tools.scheduler.MessageSchedulerScreen
+import com.whatsappdirect.direct_cha.ui.screens.tools.videosplitter.VideoSplitterScreen
+import com.whatsappdirect.direct_cha.ui.screens.tools.blankmessage.BlankMessageScreen
+import com.whatsappdirect.direct_cha.ui.screens.tools.emojicombos.EmojiCombosScreen
+import com.whatsappdirect.direct_cha.ui.screens.tools.waweb.WAWebScreen
+import com.whatsappdirect.direct_cha.ui.theme.WhatsAppDirectTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 data class BottomNavItem(
@@ -77,7 +80,7 @@ class MainActivityCompose : ComponentActivity() {
         enableEdgeToEdge()
         
         setContent {
-            WhatsAppDirectTheme {
+            AppThemeWrapper {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
@@ -87,6 +90,19 @@ class MainActivityCompose : ComponentActivity() {
             }
         }
     }
+}
+
+@Composable
+fun AppThemeWrapper(
+    content: @Composable () -> Unit
+) {
+    val viewModel: com.whatsappdirect.direct_cha.ui.screens.settings.SettingsViewModel = hiltViewModel()
+    val darkMode by viewModel.darkMode.collectAsState(initial = false)
+    
+    WhatsAppDirectTheme(
+        darkTheme = darkMode,
+        content = content
+    )
 }
 
 @Composable
@@ -154,7 +170,15 @@ fun MainApp() {
             composable(Screen.DirectChat.route) {
                 DirectChatScreen(
                     onNavigateToCallLog = {
-                        // TODO: Navigate to call log picker
+                        // Call log picker opens device's native call log
+                        val intent = android.content.Intent(android.content.Intent.ACTION_VIEW).apply {
+                            type = "vnd.android.cursor.dir/calls"
+                        }
+                        try {
+                            navController.context.startActivity(intent)
+                        } catch (e: Exception) {
+                            // Fallback: just ignore if call log not available
+                        }
                     }
                 )
             }

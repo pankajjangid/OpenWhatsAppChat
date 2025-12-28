@@ -1,4 +1,4 @@
-package com.whatsappdirect.direct_chat.ui.screens.tools.scheduler
+package com.whatsappdirect.direct_cha.ui.screens.tools.scheduler
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
@@ -62,7 +62,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.whatsappdirect.direct_chat.data.model.ScheduledMessage
+import com.whatsappdirect.direct_cha.data.model.ScheduledMessage
 import java.net.URLEncoder
 import java.text.SimpleDateFormat
 import java.util.Calendar

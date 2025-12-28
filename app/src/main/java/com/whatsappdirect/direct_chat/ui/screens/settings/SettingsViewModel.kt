@@ -1,10 +1,10 @@
-package com.whatsappdirect.direct_chat.ui.screens.settings
+package com.whatsappdirect.direct_cha.ui.screens.settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.whatsappdirect.direct_chat.data.local.MessageTemplateDao
-import com.whatsappdirect.direct_chat.data.local.PreferencesManager
-import com.whatsappdirect.direct_chat.data.local.RecentNumberDao
+import com.whatsappdirect.direct_cha.data.local.MessageTemplateDao
+import com.whatsappdirect.direct_cha.data.local.PreferencesManager
+import com.whatsappdirect.direct_cha.data.local.RecentNumberDao
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch

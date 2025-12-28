@@ -1,9 +1,9 @@
-package com.whatsappdirect.direct_chat.ui.screens.tools.scheduler
+package com.whatsappdirect.direct_cha.ui.screens.tools.scheduler
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.whatsappdirect.direct_chat.data.local.ScheduledMessageDao
-import com.whatsappdirect.direct_chat.data.model.ScheduledMessage
+import com.whatsappdirect.direct_cha.data.local.ScheduledMessageDao
+import com.whatsappdirect.direct_cha.data.model.ScheduledMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch

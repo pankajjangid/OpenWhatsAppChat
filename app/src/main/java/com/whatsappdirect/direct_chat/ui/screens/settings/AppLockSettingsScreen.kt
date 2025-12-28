@@ -1,4 +1,4 @@
-package com.whatsappdirect.direct_chat.ui.screens.settings
+package com.whatsappdirect.direct_cha.ui.screens.settings
 
 import android.widget.Toast
 import androidx.biometric.BiometricManager
@@ -47,7 +47,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.whatsappdirect.direct_chat.data.local.PreferencesManager
+import com.whatsappdirect.direct_cha.data.local.PreferencesManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

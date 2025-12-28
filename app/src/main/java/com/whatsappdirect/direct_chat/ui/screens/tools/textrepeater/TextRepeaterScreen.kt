@@ -1,4 +1,4 @@
-package com.whatsappdirect.direct_chat.ui.screens.tools.textrepeater
+package com.whatsappdirect.direct_cha.ui.screens.tools.textrepeater
 
 import android.content.Intent
 import android.widget.Toast

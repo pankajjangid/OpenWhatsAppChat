@@ -1,4 +1,4 @@
-package com.whatsappdirect.direct_chat.navigation
+package com.whatsappdirect.direct_cha.navigation
 
 sealed class Screen(val route: String) {
     data object Splash : Screen("splash")

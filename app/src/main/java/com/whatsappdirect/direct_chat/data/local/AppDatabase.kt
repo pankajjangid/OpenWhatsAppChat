@@ -1,12 +1,12 @@
-package com.whatsappdirect.direct_chat.data.local
+package com.whatsappdirect.direct_cha.data.local
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.whatsappdirect.direct_chat.data.model.ContactGroup
-import com.whatsappdirect.direct_chat.data.model.GroupMember
-import com.whatsappdirect.direct_chat.data.model.MessageTemplate
-import com.whatsappdirect.direct_chat.data.model.RecentNumber
-import com.whatsappdirect.direct_chat.data.model.ScheduledMessage
+import com.whatsappdirect.direct_cha.data.model.ContactGroup
+import com.whatsappdirect.direct_cha.data.model.GroupMember
+import com.whatsappdirect.direct_cha.data.model.MessageTemplate
+import com.whatsappdirect.direct_cha.data.model.RecentNumber
+import com.whatsappdirect.direct_cha.data.model.ScheduledMessage
 
 @Database(
     entities = [RecentNumber::class, MessageTemplate::class, ContactGroup::class, GroupMember::class, ScheduledMessage::class],

@@ -4,17 +4,17 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
-    // Uncomment after adding correct google-services.json with package: com.whatsappdirect.direct_chat
+    // Uncomment after adding correct google-services.json with package: com.whatsappdirect.direct_cha
     // alias(libs.plugins.google.services)
     // alias(libs.plugins.firebase.crashlytics)
 }
 
 android {
-    namespace = "com.whatsappdirect.direct_chat"
+    namespace = "com.whatsappdirect.direct_cha"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.whatsappdirect.direct_chat"
+        applicationId = "com.whatsappdirect.direct_cha"
         minSdk = 24
         targetSdk = 35
         versionCode = 16

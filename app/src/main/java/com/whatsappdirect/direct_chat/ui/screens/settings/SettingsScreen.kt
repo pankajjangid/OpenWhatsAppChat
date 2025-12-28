@@ -1,4 +1,4 @@
-package com.whatsappdirect.direct_chat.ui.screens.settings
+package com.whatsappdirect.direct_cha.ui.screens.settings
 
 import android.content.Intent
 import android.net.Uri
@@ -59,6 +59,7 @@ fun SettingsScreen(
     val context = LocalContext.current
     var showClearDataDialog by remember { mutableStateOf(false) }
     val incognitoMode by viewModel.incognitoMode.collectAsState(initial = false)
+    val darkMode by viewModel.darkMode.collectAsState(initial = false)
     
     Scaffold(
         topBar = {
@@ -78,11 +79,12 @@ fun SettingsScreen(
                 .verticalScroll(rememberScrollState())
         ) {
             SettingsSection(title = "Preferences") {
-                SettingsItem(
+                SettingsItemWithSwitch(
                     icon = Icons.Default.DarkMode,
                     title = "Dark Mode",
-                    subtitle = "Follow system settings",
-                    onClick = { /* TODO: Implement dark mode toggle */ }
+                    subtitle = "Enable dark theme",
+                    checked = darkMode,
+                    onCheckedChange = { viewModel.setDarkMode(it) }
                 )
                 
                 HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
@@ -125,7 +127,7 @@ fun SettingsScreen(
                             putExtra(Intent.EXTRA_SUBJECT, "WhatsApp Direct")
                             putExtra(
                                 Intent.EXTRA_TEXT,
-                                "Check out WhatsApp Direct - Send messages without saving contacts!\n\nhttps://play.google.com/store/apps/details?id=com.whatsappdirect.direct_chat"
+                                "Check out WhatsApp Direct - Send messages without saving contacts!\n\nhttps://play.google.com/store/apps/details?id=com.whatsappdirect.direct_cha"
                             )
                         }
                         context.startActivity(Intent.createChooser(shareIntent, "Share via"))
@@ -139,7 +141,7 @@ fun SettingsScreen(
                     title = "Rate App",
                     subtitle = "Rate us on Play Store",
                     onClick = {
-                        val uri = Uri.parse("market://details?id=com.whatsappdirect.direct_chat")
+                        val uri = Uri.parse("market://details?id=com.whatsappdirect.direct_cha")
                         val intent = Intent(Intent.ACTION_VIEW, uri)
                         try {
                             context.startActivity(intent)
@@ -147,7 +149,7 @@ fun SettingsScreen(
                             context.startActivity(
                                 Intent(
                                     Intent.ACTION_VIEW,
-                                    Uri.parse("https://play.google.com/store/apps/details?id=com.whatsappdirect.direct_chat")
+                                    Uri.parse("https://play.google.com/store/apps/details?id=com.whatsappdirect.direct_cha")
                                 )
                             )
                         }

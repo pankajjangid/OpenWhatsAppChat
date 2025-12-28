@@ -1,4 +1,4 @@
-package com.whatsappdirect.direct_chat.ui.screens.tools.waweb
+package com.whatsappdirect.direct_cha.ui.screens.tools.waweb
 
 import android.content.Intent
 import android.net.Uri

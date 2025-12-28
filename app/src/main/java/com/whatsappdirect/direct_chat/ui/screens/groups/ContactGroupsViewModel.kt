@@ -1,10 +1,10 @@
-package com.whatsappdirect.direct_chat.ui.screens.groups
+package com.whatsappdirect.direct_cha.ui.screens.groups
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.whatsappdirect.direct_chat.data.local.ContactGroupDao
-import com.whatsappdirect.direct_chat.data.model.ContactGroup
-import com.whatsappdirect.direct_chat.data.model.GroupMember
+import com.whatsappdirect.direct_cha.data.local.ContactGroupDao
+import com.whatsappdirect.direct_cha.data.model.ContactGroup
+import com.whatsappdirect.direct_cha.data.model.GroupMember
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch

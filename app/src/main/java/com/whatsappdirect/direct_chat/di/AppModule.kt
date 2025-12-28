@@ -1,12 +1,12 @@
-package com.whatsappdirect.direct_chat.di
+package com.whatsappdirect.direct_cha.di
 
 import android.content.Context
 import androidx.room.Room
-import com.whatsappdirect.direct_chat.data.local.AppDatabase
-import com.whatsappdirect.direct_chat.data.local.ContactGroupDao
-import com.whatsappdirect.direct_chat.data.local.MessageTemplateDao
-import com.whatsappdirect.direct_chat.data.local.RecentNumberDao
-import com.whatsappdirect.direct_chat.data.local.ScheduledMessageDao
+import com.whatsappdirect.direct_cha.data.local.AppDatabase
+import com.whatsappdirect.direct_cha.data.local.ContactGroupDao
+import com.whatsappdirect.direct_cha.data.local.MessageTemplateDao
+import com.whatsappdirect.direct_cha.data.local.RecentNumberDao
+import com.whatsappdirect.direct_cha.data.local.ScheduledMessageDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

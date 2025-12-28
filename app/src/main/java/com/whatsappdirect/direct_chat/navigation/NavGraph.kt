@@ -1,15 +1,15 @@
-package com.whatsappdirect.direct_chat.navigation
+package com.whatsappdirect.direct_cha.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.whatsappdirect.direct_chat.ui.screens.contacts.ContactsScreen
-import com.whatsappdirect.direct_chat.ui.screens.directchat.DirectChatScreen
-import com.whatsappdirect.direct_chat.ui.screens.onboarding.OnboardingScreen
-import com.whatsappdirect.direct_chat.ui.screens.settings.SettingsScreen
-import com.whatsappdirect.direct_chat.ui.screens.splash.SplashScreen
-import com.whatsappdirect.direct_chat.ui.screens.tools.ToolsScreen
+import com.whatsappdirect.direct_cha.ui.screens.contacts.ContactsScreen
+import com.whatsappdirect.direct_cha.ui.screens.directchat.DirectChatScreen
+import com.whatsappdirect.direct_cha.ui.screens.onboarding.OnboardingScreen
+import com.whatsappdirect.direct_cha.ui.screens.settings.SettingsScreen
+import com.whatsappdirect.direct_cha.ui.screens.splash.SplashScreen
+import com.whatsappdirect.direct_cha.ui.screens.tools.ToolsScreen
 
 @Composable
 fun NavGraph(

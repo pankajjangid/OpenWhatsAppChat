@@ -1,4 +1,4 @@
-package com.whatsappdirect.direct_chat.ui.screens.tools.emojicombos
+package com.whatsappdirect.direct_cha.ui.screens.tools.emojicombos
 
 import android.content.ClipData
 import android.content.ClipboardManager

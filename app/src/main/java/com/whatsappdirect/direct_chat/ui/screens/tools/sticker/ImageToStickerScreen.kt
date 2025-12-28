@@ -1,4 +1,4 @@
-package com.whatsappdirect.direct_chat.ui.screens.tools.sticker
+package com.whatsappdirect.direct_cha.ui.screens.tools.sticker
 
 import android.content.ContentValues
 import android.content.Context

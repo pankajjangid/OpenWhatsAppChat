@@ -1,4 +1,4 @@
-package com.whatsappdirect.direct_chat.ui.screens.contacts
+package com.whatsappdirect.direct_cha.ui.screens.contacts
 
 import android.Manifest
 import android.content.Intent
@@ -61,7 +61,7 @@ import coil.compose.AsyncImage
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
-import com.whatsappdirect.direct_chat.data.model.RecentNumber
+import com.whatsappdirect.direct_cha.data.model.RecentNumber
 import java.net.URLEncoder
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)

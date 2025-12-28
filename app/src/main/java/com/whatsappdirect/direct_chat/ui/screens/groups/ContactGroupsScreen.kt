@@ -1,4 +1,4 @@
-package com.whatsappdirect.direct_chat.ui.screens.groups
+package com.whatsappdirect.direct_cha.ui.screens.groups
 
 import android.content.Intent
 import android.net.Uri
@@ -61,8 +61,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.whatsappdirect.direct_chat.data.model.ContactGroup
-import com.whatsappdirect.direct_chat.data.model.GroupMember
+import com.whatsappdirect.direct_cha.data.model.ContactGroup
+import com.whatsappdirect.direct_cha.data.model.GroupMember
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.net.URLEncoder

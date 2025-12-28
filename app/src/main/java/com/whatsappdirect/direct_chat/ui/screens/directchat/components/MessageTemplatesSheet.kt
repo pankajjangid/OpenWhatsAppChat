@@ -1,4 +1,4 @@
-package com.whatsappdirect.direct_chat.ui.screens.directchat.components
+package com.whatsappdirect.direct_cha.ui.screens.directchat.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -38,7 +38,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.whatsappdirect.direct_chat.data.model.MessageTemplate
+import com.whatsappdirect.direct_cha.data.model.MessageTemplate
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

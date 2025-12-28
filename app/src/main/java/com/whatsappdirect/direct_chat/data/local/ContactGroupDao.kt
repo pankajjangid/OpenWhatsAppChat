@@ -1,4 +1,4 @@
-package com.whatsappdirect.direct_chat.data.local
+package com.whatsappdirect.direct_cha.data.local
 
 import androidx.room.Dao
 import androidx.room.Delete
@@ -7,8 +7,8 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
-import com.whatsappdirect.direct_chat.data.model.ContactGroup
-import com.whatsappdirect.direct_chat.data.model.GroupMember
+import com.whatsappdirect.direct_cha.data.model.ContactGroup
+import com.whatsappdirect.direct_cha.data.model.GroupMember
 import kotlinx.coroutines.flow.Flow
 
 @Dao

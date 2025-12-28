@@ -1,4 +1,4 @@
-package com.whatsappdirect.direct_chat.ui.screens.onboarding
+package com.whatsappdirect.direct_cha.ui.screens.onboarding
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi

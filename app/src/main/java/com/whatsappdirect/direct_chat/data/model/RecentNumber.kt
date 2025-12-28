@@ -1,4 +1,4 @@
-package com.whatsappdirect.direct_chat.data.model
+package com.whatsappdirect.direct_cha.data.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

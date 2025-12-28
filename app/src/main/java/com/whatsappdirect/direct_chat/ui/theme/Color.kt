@@ -1,4 +1,4 @@
-package com.whatsappdirect.direct_chat.ui.theme
+package com.whatsappdirect.direct_cha.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

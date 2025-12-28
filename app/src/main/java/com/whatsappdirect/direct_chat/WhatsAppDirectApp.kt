@@ -1,4 +1,4 @@
-package com.whatsappdirect.direct_chat
+package com.whatsappdirect.direct_cha
 
 import android.app.Application
 import com.google.android.gms.ads.MobileAds
