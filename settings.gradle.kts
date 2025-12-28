@@ -22,5 +22,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "OpenWhatsAppChat"
+rootProject.name = "WA Chat Tools"
 include(":app")
