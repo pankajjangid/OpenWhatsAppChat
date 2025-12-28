@@ -41,6 +41,7 @@ import com.whatsappdirect.direct_cha.ui.screens.onboarding.OnboardingScreen
 import com.whatsappdirect.direct_cha.ui.screens.settings.SettingsScreen
 import com.whatsappdirect.direct_cha.ui.screens.splash.SplashScreen
 import com.whatsappdirect.direct_cha.ui.screens.tools.ToolsScreen
+import com.whatsappdirect.direct_cha.ui.screens.tools.deletedmessages.DeletedMessagesScreen
 import com.whatsappdirect.direct_cha.ui.screens.tools.textformatter.TextFormatterScreen
 import com.whatsappdirect.direct_cha.ui.screens.tools.qrgenerator.QrGeneratorScreen
 import com.whatsappdirect.direct_cha.ui.screens.tools.statussaver.StatusSaverScreen
@@ -185,6 +186,9 @@ fun MainApp() {
             
             composable(Screen.Tools.route) {
                 ToolsScreen(
+                    onNavigateToDeletedMessages = {
+                        navController.navigate(Screen.DeletedMessages.route)
+                    },
                     onNavigateToStatusSaver = {
                         navController.navigate(Screen.StatusSaver.route)
                     },
@@ -238,6 +242,12 @@ fun MainApp() {
             
             composable(Screen.StatusSaver.route) {
                 StatusSaverScreen(
+                    onNavigateBack = { navController.popBackStack() }
+                )
+            }
+            
+            composable(Screen.DeletedMessages.route) {
+                DeletedMessagesScreen(
                     onNavigateBack = { navController.popBackStack() }
                 )
             }

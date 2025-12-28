@@ -55,6 +55,9 @@ fun NavGraph(
         
         composable(Screen.Tools.route) {
             ToolsScreen(
+                onNavigateToDeletedMessages = {
+                    navController.navigate(Screen.DeletedMessages.route)
+                },
                 onNavigateToStatusSaver = {
                     navController.navigate(Screen.StatusSaver.route)
                 },

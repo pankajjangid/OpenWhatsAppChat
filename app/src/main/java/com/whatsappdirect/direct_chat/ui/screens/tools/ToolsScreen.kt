@@ -16,6 +16,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Computer
 import androidx.compose.material.icons.filled.ContentCut
+import androidx.compose.material.icons.filled.DeleteSweep
 import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.EmojiEmotions
 import androidx.compose.material.icons.filled.FormatBold
@@ -51,6 +52,12 @@ data class Tool(
 )
 
 val tools = listOf(
+    Tool(
+        id = "deleted_messages",
+        name = "Deleted Messages",
+        description = "Read deleted WhatsApp messages",
+        icon = Icons.Default.DeleteSweep
+    ),
     Tool(
         id = "status_saver",
         name = "Status Saver",
@@ -128,6 +135,7 @@ val tools = listOf(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ToolsScreen(
+    onNavigateToDeletedMessages: () -> Unit,
     onNavigateToStatusSaver: () -> Unit,
     onNavigateToQrGenerator: () -> Unit,
     onNavigateToTextFormatter: () -> Unit,
@@ -166,6 +174,7 @@ fun ToolsScreen(
                     tool = tool,
                     onClick = {
                         when (tool.id) {
+                            "deleted_messages" -> onNavigateToDeletedMessages()
                             "status_saver" -> onNavigateToStatusSaver()
                             "qr_generator" -> onNavigateToQrGenerator()
                             "text_formatter" -> onNavigateToTextFormatter()

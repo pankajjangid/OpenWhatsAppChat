@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.whatsappdirect.direct_cha.data.local.AppDatabase
 import com.whatsappdirect.direct_cha.data.local.ContactGroupDao
+import com.whatsappdirect.direct_cha.data.local.DeletedMessageDao
 import com.whatsappdirect.direct_cha.data.local.MessageTemplateDao
 import com.whatsappdirect.direct_cha.data.local.RecentNumberDao
 import com.whatsappdirect.direct_cha.data.local.ScheduledMessageDao
@@ -53,5 +54,11 @@ object AppModule {
     @Singleton
     fun provideScheduledMessageDao(database: AppDatabase): ScheduledMessageDao {
         return database.scheduledMessageDao()
+    }
+    
+    @Provides
+    @Singleton
+    fun provideDeletedMessageDao(database: AppDatabase): DeletedMessageDao {
+        return database.deletedMessageDao()
     }
 }

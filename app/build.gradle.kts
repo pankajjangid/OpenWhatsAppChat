@@ -17,7 +17,7 @@ android {
         applicationId = "com.whatsappdirect.direct_cha"
         minSdk = 24
         targetSdk = 35
-        versionCode = 18
+        versionCode = 19
         versionName = "3.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
