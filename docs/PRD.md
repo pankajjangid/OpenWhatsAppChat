@@ -1,7 +1,7 @@
 # Product Requirements Document (PRD)
 ## OpenWhatsAppChat - WhatsApp Tools Suite
 
-**Version:** 2.0  
+**Version:** 3.1  
 **Last Updated:** December 2024  
 **Author:** Development Team
 
@@ -13,7 +13,7 @@ OpenWhatsAppChat is a utility app that provides tools to enhance WhatsApp and Wh
 
 ---
 
-## 2. Current Features (v1.x)
+## 2. Current Features (v3.x)
 
 | Feature | Description | Status |
 |---------|-------------|--------|
@@ -22,6 +22,23 @@ OpenWhatsAppChat is a utility app that provides tools to enhance WhatsApp and Wh
 | SMS Picker | Select numbers from SMS messages | ✅ Active |
 | Phone Validation | Validate phone numbers with country codes | ✅ Active |
 | Onboarding | First-time user tutorial | ✅ Active |
+| Status Saver | Save WhatsApp statuses using SAF | ✅ Active |
+| QR Generator | Generate WhatsApp QR codes | ✅ Active |
+| QR Scanner | Scan QR codes to start chat | ✅ Active |
+| Text Formatter | Bold, italic, strikethrough formatting | ✅ Active |
+| Text Repeater | Repeat text multiple times | ✅ Active |
+| Blank Message | Send invisible messages | ✅ Active |
+| Emoji Combos | Popular emoji combinations | ✅ Active |
+| Image to Sticker | Convert images to stickers | ✅ Active |
+| Video Splitter | Split videos for status | ✅ Active |
+| Message Scheduler | Schedule messages | ✅ Active |
+| Bulk Message | Send to multiple numbers | ✅ Active |
+| Contact Groups | Create groups for bulk ops | ✅ Active |
+| WhatsApp Web | Quick access to WA Web | ✅ Active |
+| Deleted Messages | Read deleted WhatsApp messages | ✅ Active |
+| App Lock | PIN/Biometric protection | ✅ Active |
+| Incognito Mode | Don't save to history | ✅ Active |
+| Dark Mode | Full dark theme support | ✅ Active |
 
 ---
 
@@ -89,9 +106,10 @@ OpenWhatsAppChat is a utility app that provides tools to enhance WhatsApp and Wh
 - **Audio to Status** - Convert audio to video for status
 
 #### 3.4.3 Privacy Features
-- **Incognito Mode** - Don't save numbers to recent history
-- **App Lock** - PIN/Biometric lock for the app
-- **Clear History** - One-tap clear all local data
+- **Incognito Mode** - Don't save numbers to recent history ✅
+- **App Lock** - PIN/Biometric lock for the app ✅
+- **Clear History** - One-tap clear all local data ✅
+- **Deleted Messages Reader** - View messages deleted by sender ✅
 
 ---
 
@@ -205,10 +223,14 @@ Home (Bottom Navigation)
 | Permission | Purpose | Required |
 |------------|---------|----------|
 | INTERNET | Ads, analytics | Yes |
-| READ_EXTERNAL_STORAGE | Status saver | Optional |
+| READ_EXTERNAL_STORAGE | Status saver (SDK ≤32) | Optional |
+| READ_MEDIA_IMAGES | Status saver (SDK 33+) | Optional |
+| READ_MEDIA_VIDEO | Status saver (SDK 33+) | Optional |
 | CAMERA | QR scanner | Optional |
 | READ_CALL_LOG | Call log picker | Optional |
 | READ_SMS | SMS picker | Optional |
+| READ_CONTACTS | Contact picker | Optional |
+| BIND_NOTIFICATION_LISTENER_SERVICE | Deleted messages reader | Optional |
 
 ### 7.2 Data Handling
 - All data stored locally on device
@@ -226,38 +248,47 @@ Home (Bottom Navigation)
 
 ## 8. Development Phases
 
-### Phase 1: Foundation (Week 1-2)
-- [ ] Migrate to Kotlin DSL
-- [ ] Update to latest SDK (35)
-- [ ] Setup Jetpack Compose
-- [ ] Implement new architecture (MVVM)
-- [ ] Migrate Direct Chat to Compose
-- [ ] Update AdMob SDK
+### Phase 1: Foundation ✅ COMPLETED
+- [x] Migrate to Kotlin DSL
+- [x] Update to latest SDK (35)
+- [x] Setup Jetpack Compose
+- [x] Implement new architecture (MVVM + Hilt)
+- [x] Migrate Direct Chat to Compose
+- [x] Update AdMob SDK
 
-### Phase 2: Core Features (Week 3-4)
-- [ ] Recent numbers history
-- [ ] Quick message templates
-- [ ] Favorites system
-- [ ] WhatsApp/WA Business toggle
-- [ ] New onboarding flow
+### Phase 2: Core Features ✅ COMPLETED
+- [x] Recent numbers history
+- [x] Quick message templates
+- [x] Favorites system
+- [x] WhatsApp/WA Business toggle
+- [x] New onboarding flow
 
-### Phase 3: Tools (Week 5-6)
-- [ ] Status Saver
-- [ ] QR Code Generator/Scanner
-- [ ] Text formatting tools
-- [ ] Blank message sender
+### Phase 3: Tools ✅ COMPLETED
+- [x] Status Saver (SAF-based)
+- [x] QR Code Generator/Scanner
+- [x] Text formatting tools
+- [x] Blank message sender
+- [x] Text repeater
+- [x] Emoji combos
+- [x] Image to Sticker
+- [x] Video Splitter
+- [x] WhatsApp Web access
 
-### Phase 4: Advanced (Week 7-8)
-- [ ] Bulk messaging UI
-- [ ] Contact groups
-- [ ] Local analytics
-- [ ] Settings & preferences
+### Phase 4: Advanced ✅ COMPLETED
+- [x] Bulk messaging UI
+- [x] Contact groups
+- [x] Message scheduler
+- [x] Settings & preferences
+- [x] App Lock (PIN/Biometric)
+- [x] Incognito mode
+- [x] Dark mode toggle
+- [x] Deleted Messages Reader
 
-### Phase 5: Polish (Week 9-10)
-- [ ] UI/UX refinement
-- [ ] Performance optimization
-- [ ] Testing & bug fixes
-- [ ] Play Store preparation
+### Phase 5: Polish ✅ COMPLETED
+- [x] UI/UX refinement (Material 3)
+- [x] Performance optimization
+- [x] Google Play policy compliance
+- [x] Play Store preparation (v3.1)
 
 ---
 
@@ -327,6 +358,17 @@ Home (Bottom Navigation)
 - As a business user, I want to generate a QR code for customers to chat with me
 - As a user, I want to scan a QR code to start a chat
 
+### Deleted Messages
+- As a user, I want to read messages that were deleted by the sender
+- As a user, I want to search through my deleted messages history
+- As a user, I want to filter deleted messages by WhatsApp or WhatsApp Business
+- As a user, I want to see if a deleted message was from a group or personal chat
+
+### Privacy & Security
+- As a user, I want to lock the app with PIN or fingerprint
+- As a user, I want to use incognito mode to not save my activity
+- As a user, I want to enable dark mode for comfortable viewing
+
 ---
 
-*Document End*
+*Document End - Version 3.1*
