@@ -10,11 +10,11 @@ plugins {
 }
 
 android {
-    namespace = "com.whatsappdirect.direct_cha"
+    namespace = "com.whatsappdirect.direct_chat"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.whatsappdirect.direct_cha"
+        applicationId = "com.whatsappdirect.direct_chat"
         minSdk = 24
         targetSdk = 35
         versionCode = 16

@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:324884068392:android:8cbc82ebb7479ecf151d1d",
+        "mobilesdk_app_id": "1:324884068392:android:fb14d267d2945ed1151d1d",
         "android_client_info": {
-          "package_name": "com.whatsappdirect.direct_chat"
+          "package_name": "com.whatsappdirect.direct_cha"
         }
       },
       "oauth_client": [],
