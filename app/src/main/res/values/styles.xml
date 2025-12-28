@@ -2,8 +2,11 @@
     
     <style name="Theme.WhatsAppDirect" parent="android:Theme.Material.Light.NoActionBar">
         <item name="android:colorPrimary">@color/whatsapp_green</item>
-        <item name="android:statusBarColor">@color/whatsapp_green</item>
-        <item name="android:navigationBarColor">@color/white</item>
+        <!-- Edge-to-edge: Use transparent for Android 15+ compatibility -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar">true</item>
     </style>
 
 </resources>
