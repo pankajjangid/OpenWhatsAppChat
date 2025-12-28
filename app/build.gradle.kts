@@ -17,8 +17,8 @@ android {
         applicationId = "com.whatsappdirect.direct_cha"
         minSdk = 24
         targetSdk = 35
-        versionCode = 16
-        versionName = "3.0"
+        versionCode = 18
+        versionName = "3.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -50,6 +50,9 @@ android {
             )
             signingConfig = signingConfigs.getByName("release")
             buildConfigField("boolean", "DEVELOPER_MODE", "false")
+            ndk {
+                debugSymbolLevel = "FULL"
+            }
         }
     }
 
