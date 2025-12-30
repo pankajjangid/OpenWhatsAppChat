@@ -1,6 +1,11 @@
 package com.whatsappdirect.direct_cha.ui.screens.tools.deletedmessages
 
+import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
+import android.net.Uri
+import android.os.Build
+import android.os.PowerManager
 import android.provider.Settings
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -26,9 +31,11 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.filled.Group
 import androidx.compose.material.icons.filled.Image
+import androidx.compose.material.icons.filled.BatteryAlert
 import androidx.compose.material.icons.filled.NotificationsActive
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.VideoLibrary
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -216,7 +223,21 @@ fun DeletedMessagesScreen(
             
             if (messages.isEmpty()) {
                 EmptyState(
-                    onEnableNotifications = { showPermissionDialog = true }
+                    onEnableNotifications = { showPermissionDialog = true },
+                    onDisableBatteryOptimization = {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            val intent = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS).apply {
+                                data = Uri.parse("package:${context.packageName}")
+                            }
+                            try {
+                                context.startActivity(intent)
+                            } catch (e: Exception) {
+                                // Fallback to battery optimization settings
+                                val fallbackIntent = Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS)
+                                context.startActivity(fallbackIntent)
+                            }
+                        }
+                    }
                 )
             } else {
                 LazyColumn(
@@ -432,74 +453,222 @@ fun DeletedMessageCard(
 
 @Composable
 fun EmptyState(
-    onEnableNotifications: () -> Unit
+    onEnableNotifications: () -> Unit,
+    onDisableBatteryOptimization: () -> Unit
 ) {
-    Column(
+    val context = LocalContext.current
+    val isNotificationEnabled = isNotificationListenerEnabled(context)
+    val isBatteryOptimizationDisabled = isBatteryOptimizationDisabled(context)
+    
+    LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .padding(32.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Icon(
-            imageVector = Icons.Default.NotificationsActive,
-            contentDescription = null,
-            modifier = Modifier.size(80.dp),
-            tint = MaterialTheme.colorScheme.primary
-        )
-        
-        Spacer(modifier = Modifier.height(16.dp))
-        
-        Text(
-            text = "No Deleted Messages",
-            style = MaterialTheme.typography.headlineSmall,
-            fontWeight = FontWeight.Bold
-        )
-        
-        Spacer(modifier = Modifier.height(8.dp))
-        
-        Text(
-            text = "Enable notification access to start capturing deleted WhatsApp messages",
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            textAlign = androidx.compose.ui.text.style.TextAlign.Center
-        )
-        
-        Spacer(modifier = Modifier.height(24.dp))
-        
-        Button(onClick = onEnableNotifications) {
-            Icon(Icons.Default.NotificationsActive, null)
-            Spacer(modifier = Modifier.width(8.dp))
-            Text("Enable Notification Access")
+        item {
+            Icon(
+                imageVector = Icons.Default.NotificationsActive,
+                contentDescription = null,
+                modifier = Modifier.size(80.dp),
+                tint = MaterialTheme.colorScheme.primary
+            )
         }
         
-        Spacer(modifier = Modifier.height(16.dp))
-        
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.secondaryContainer
+        item {
+            Text(
+                text = "Setup Required",
+                style = MaterialTheme.typography.headlineSmall,
+                fontWeight = FontWeight.Bold
             )
-        ) {
-            Column(
-                modifier = Modifier.padding(16.dp)
+        }
+        
+        item {
+            Text(
+                text = "Complete the steps below to capture deleted WhatsApp messages",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = androidx.compose.ui.text.style.TextAlign.Center
+            )
+        }
+        
+        // Step 1: Notification Access
+        item {
+            SetupStepCard(
+                stepNumber = 1,
+                title = "Notification Access",
+                description = "Allow app to read WhatsApp notifications",
+                isCompleted = isNotificationEnabled,
+                buttonText = if (isNotificationEnabled) "Enabled ✓" else "Enable Now",
+                onButtonClick = onEnableNotifications,
+                icon = Icons.Default.NotificationsActive
+            )
+        }
+        
+        // Step 2: Battery Optimization
+        item {
+            SetupStepCard(
+                stepNumber = 2,
+                title = "Disable Battery Optimization",
+                description = "Prevents system from killing the service in background",
+                isCompleted = isBatteryOptimizationDisabled,
+                buttonText = if (isBatteryOptimizationDisabled) "Disabled ✓" else "Disable Now",
+                onButtonClick = onDisableBatteryOptimization,
+                icon = Icons.Default.BatteryAlert
+            )
+        }
+        
+        // How it works card
+        item {
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.secondaryContainer
+                )
             ) {
-                Text(
-                    text = "How it works:",
-                    style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.Bold
+                Column(
+                    modifier = Modifier.padding(16.dp)
+                ) {
+                    Text(
+                        text = "How it works:",
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = "1. Grant notification access permission\n" +
+                               "2. Disable battery optimization for reliable service\n" +
+                               "3. App monitors WhatsApp notifications in background\n" +
+                               "4. When sender deletes a message, it's saved here\n" +
+                               "5. View deleted messages anytime",
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                }
+            }
+        }
+        
+        // Important note
+        item {
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.errorContainer
                 )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = "1. Grant notification access permission\n" +
-                           "2. App monitors WhatsApp notifications\n" +
-                           "3. When a message is deleted, it's saved here\n" +
-                           "4. View deleted messages anytime",
-                    style = MaterialTheme.typography.bodySmall
-                )
+            ) {
+                Column(
+                    modifier = Modifier.padding(16.dp)
+                ) {
+                    Text(
+                        text = "⚠️ Important Notes:",
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onErrorContainer
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = "• Only captures messages deleted AFTER setup\n" +
+                               "• Must receive notification before deletion\n" +
+                               "• Some phones may need additional settings\n" +
+                               "• Check manufacturer settings for background apps",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onErrorContainer
+                    )
+                }
             }
         }
     }
+}
+
+@Composable
+fun SetupStepCard(
+    stepNumber: Int,
+    title: String,
+    description: String,
+    isCompleted: Boolean,
+    buttonText: String,
+    onButtonClick: () -> Unit,
+    icon: androidx.compose.ui.graphics.vector.ImageVector
+) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = if (isCompleted) 
+                MaterialTheme.colorScheme.primaryContainer 
+            else 
+                MaterialTheme.colorScheme.surfaceVariant
+        )
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(48.dp)
+                    .clip(CircleShape)
+                    .background(
+                        if (isCompleted) 
+                            MaterialTheme.colorScheme.primary 
+                        else 
+                            MaterialTheme.colorScheme.outline
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                if (isCompleted) {
+                    Text(
+                        text = "✓",
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        fontWeight = FontWeight.Bold
+                    )
+                } else {
+                    Text(
+                        text = stepNumber.toString(),
+                        color = MaterialTheme.colorScheme.surface,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
+            
+            Spacer(modifier = Modifier.width(16.dp))
+            
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = description,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+            
+            Button(
+                onClick = onButtonClick,
+                enabled = !isCompleted
+            ) {
+                Text(buttonText, maxLines = 1)
+            }
+        }
+    }
+}
+
+private fun isNotificationListenerEnabled(context: Context): Boolean {
+    val packageName = context.packageName
+    val flat = Settings.Secure.getString(context.contentResolver, "enabled_notification_listeners")
+    return flat != null && flat.contains(packageName)
+}
+
+private fun isBatteryOptimizationDisabled(context: Context): Boolean {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
+        return powerManager.isIgnoringBatteryOptimizations(context.packageName)
+    }
+    return true
 }
 
 private fun formatTimestamp(timestamp: Long): String {
