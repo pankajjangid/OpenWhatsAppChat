@@ -82,7 +82,12 @@ class WhatsAppNotificationListener : NotificationListenerService() {
     override fun onNotificationPosted(sbn: StatusBarNotification) {
         super.onNotificationPosted(sbn)
         
-        if (!isWhatsAppNotification(sbn.packageName)) return
+        Log.d(TAG, "📩 onNotificationPosted from: ${sbn.packageName}")
+        
+        if (!isWhatsAppNotification(sbn.packageName)) {
+            Log.d(TAG, "Not a WhatsApp notification, ignoring")
+            return
+        }
         
         val notification = sbn.notification ?: return
         val extras = notification.extras ?: return
@@ -90,6 +95,8 @@ class WhatsAppNotificationListener : NotificationListenerService() {
         try {
             val title = extras.getCharSequence(Notification.EXTRA_TITLE)?.toString() ?: return
             val text = extras.getCharSequence(Notification.EXTRA_TEXT)?.toString() ?: return
+            
+            Log.d(TAG, "📩 WhatsApp notification - Title: $title, Text: $text")
             
             // Skip empty notifications
             if (text.isEmpty() || title.isEmpty()) return
@@ -201,29 +208,86 @@ class WhatsAppNotificationListener : NotificationListenerService() {
         
         if (!isWhatsAppNotification(sbn.packageName)) return
         
+        Log.d(TAG, "onNotificationRemoved with reason: $reason, key: ${sbn.key}")
+        
+        // Get the message key for this notification
+        val messageKey = notificationToMessageKey.remove(sbn.key) ?: run {
+            Log.d(TAG, "No message key found for notification: ${sbn.key}")
+            return
+        }
+        val messageData = activeMessages.remove(messageKey) ?: run {
+            Log.d(TAG, "No message data found for key: $messageKey")
+            return
+        }
+        
+        // Reason codes (from NotificationListenerService):
+        // REASON_CLICK = 1 (user clicked notification)
+        // REASON_CANCEL = 2 (user dismissed/swiped)
+        // REASON_CANCEL_ALL = 3 (user cleared all)
+        // REASON_ERROR = 4
+        // REASON_PACKAGE_CHANGED = 5
+        // REASON_USER_STOPPED = 6
+        // REASON_PACKAGE_BANNED = 7
+        // REASON_APP_CANCEL = 8 (app cancelled - WhatsApp deleted)
+        // REASON_APP_CANCEL_ALL = 9
+        // REASON_LISTENER_CANCEL = 10
+        // REASON_GROUP_SUMMARY_CANCELED = 12
+        // REASON_GROUP_OPTIMIZATION = 13
+        // REASON_PACKAGE_SUSPENDED = 14
+        // REASON_PROFILE_TURNED_OFF = 15
+        // REASON_UNAUTOBUNDLED = 16
+        // REASON_CHANNEL_BANNED = 17
+        // REASON_SNOOZED = 18
+        // REASON_TIMEOUT = 19
+        // REASON_CHANNEL_REMOVED = 20
+        // REASON_CLEAR_DATA = 21
+        // REASON_ASSISTANT_CANCEL = 22
+        
+        Log.d(TAG, "Notification removed - Reason: $reason, Sender: ${messageData.senderName}, Text: ${messageData.messageText}")
+        
+        // Save message if removed by app (WhatsApp) - this includes when message is deleted
+        // Also save for some other reasons that might indicate deletion
+        // We're being more permissive now to capture more cases
+        val shouldSave = when (reason) {
+            1 -> false  // REASON_CLICK - user opened the chat, don't save
+            2 -> false  // REASON_CANCEL - user swiped away, don't save
+            3 -> false  // REASON_CANCEL_ALL - user cleared all, don't save
+            8 -> true   // REASON_APP_CANCEL - app cancelled (WhatsApp deleted message)
+            9 -> true   // REASON_APP_CANCEL_ALL - app cancelled all
+            else -> {
+                // For any other reason, save it - better to have false positives than miss deletions
+                Log.d(TAG, "Unknown reason $reason, saving message")
+                true
+            }
+        }
+        
+        if (!shouldSave) {
+            Log.d(TAG, "Skipping - user action (reason: $reason)")
+            return
+        }
+        
+        saveDeletedMessage(messageData)
+    }
+    
+    // Override the simpler version for older Android versions (pre-Lollipop)
+    override fun onNotificationRemoved(sbn: StatusBarNotification) {
+        super.onNotificationRemoved(sbn)
+        
+        if (!isWhatsAppNotification(sbn.packageName)) return
+        
+        Log.d(TAG, "onNotificationRemoved (simple), key: ${sbn.key}")
+        
         // Get the message key for this notification
         val messageKey = notificationToMessageKey.remove(sbn.key) ?: return
         val messageData = activeMessages.remove(messageKey) ?: return
         
-        // IMPORTANT: Only save if the notification was removed by the app (not user swipe)
-        // Reason codes:
-        // REASON_CANCEL = 2 (user dismissed)
-        // REASON_CLICK = 1 (user clicked)
-        // REASON_APP_CANCEL = 8 (app cancelled - this is what WhatsApp does for deleted messages)
-        // REASON_CANCEL_ALL = 3 (user cleared all)
-        // REASON_LISTENER_CANCEL = 10 (listener cancelled)
-        
-        // We want to capture when WhatsApp removes the notification (REASON_APP_CANCEL = 8)
-        // This happens when a message is "deleted for everyone"
-        val shouldSave = reason == 8 // REASON_APP_CANCEL
-        
-        Log.d(TAG, "Notification removed - Reason: $reason, Sender: ${messageData.senderName}, Text: ${messageData.messageText}")
-        
-        if (!shouldSave) {
-            Log.d(TAG, "Skipping - not an app cancellation (reason: $reason)")
-            return
-        }
-        
+        // Without reason code, we save all removed notifications
+        // This may cause some false positives but ensures we don't miss deletions
+        Log.d(TAG, "Saving message (no reason available): ${messageData.senderName} - ${messageData.messageText}")
+        saveDeletedMessage(messageData)
+    }
+    
+    private fun saveDeletedMessage(messageData: MessageData) {
         // Check for duplicates
         val duplicateKey = "${messageData.senderName}_${messageData.messageText.hashCode()}"
         if (recentlySaved.contains(duplicateKey)) {
@@ -231,7 +295,7 @@ class WhatsAppNotificationListener : NotificationListenerService() {
             return
         }
         
-        // Add to recently saved (will be cleared periodically)
+        // Add to recently saved
         recentlySaved.add(duplicateKey)
         
         // Clean up old entries if too many
@@ -256,27 +320,26 @@ class WhatsAppNotificationListener : NotificationListenerService() {
                 )
                 
                 deletedMessageDao.insertDeletedMessage(deletedMessage)
-                Log.d(TAG, "Saved deleted message from ${messageData.senderName}")
+                Log.d(TAG, "✅ Saved deleted message from ${messageData.senderName}: ${messageData.messageText}")
             } catch (e: Exception) {
                 Log.e(TAG, "Error saving deleted message", e)
             }
         }
     }
     
-    // Override the simpler version too for compatibility
-    override fun onNotificationRemoved(sbn: StatusBarNotification) {
-        // This will be called on older Android versions
-        // We can't determine the reason here, so we'll be more conservative
-        super.onNotificationRemoved(sbn)
-    }
-    
     override fun onListenerConnected() {
         super.onListenerConnected()
-        // Service is connected and ready
+        Log.d(TAG, "✅ NotificationListenerService CONNECTED - Ready to capture WhatsApp messages")
+        
+        // Clear any stale data
+        activeMessages.clear()
+        notificationToMessageKey.clear()
+        recentlySaved.clear()
     }
     
     override fun onListenerDisconnected() {
         super.onListenerDisconnected()
+        Log.d(TAG, "⚠️ NotificationListenerService DISCONNECTED")
         // Try to reconnect
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             requestRebind(android.content.ComponentName(this, WhatsAppNotificationListener::class.java))
